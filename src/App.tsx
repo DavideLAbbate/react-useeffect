@@ -8,6 +8,8 @@ export interface Post {
   text: string | null;
 }
 
+
+
 export default function App() {
   const [index, setIndex] = React.useState<number>(1);
   const [post, setPost] = React.useState<Post>({
@@ -16,13 +18,21 @@ export default function App() {
     text: null,
   });
 
-  React.useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${index}`)
-      .then((res) => res.json())
-      .then((res) => {
-        setPost({ id: res.id, title: res.title, text: res.body });
-      });
-  }, [index]);
+
+
+  /**
+   * Getting object json from a fetch api
+   */
+  function apiGet (){
+    fetch(`https://jsonplaceholder.typicode.com/posts/${index}`) 
+    .then((res) => res.json())
+    .then((res) => {
+      setPost({ id: res.id, title: res.title, text: res.body });
+    });
+  }
+  
+
+  React.useEffect(() => {apiGet()}, [index]);
 
   return (
     <div className={styles.container}>
@@ -41,7 +51,7 @@ export default function App() {
         {/* Btn decrease */}
         <button
           className={styles['btn--decrease']}
-          onClick={() => setIndex(index - 1)}
+          onClick={() => (index<=1) ? onclick : setIndex(index - 1)}
         >
           Decrease
         </button>
